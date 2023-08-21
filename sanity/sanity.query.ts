@@ -19,4 +19,55 @@ export async function getProfile() {
       skills
     }`
   );
+};
+
+// sanity/sanity.query.ts
+
+export async function getJob() {
+  return client.fetch(
+    groq`*[_type == "job"]{
+      _id,
+      name,
+      jobTitle,
+      "logo": logo.asset->url,
+      url,
+      description,
+      startDate,
+      endDate,
+    }`
+  );
+};
+
+
+//Here's the query to get all the projects:
+
+export async function getProjects() {
+  return client.fetch(
+    groq`*[_type == "project"]{
+      _id, 
+      name,
+      "slug": slug.current,
+      tagline,
+      "logo": logo.asset->url,
+    }`
+  );
+};
+
+
+
+
+// sanity/sanity.query.ts
+
+export async function getSingleProject(slug: string) {
+  return client.fetch(
+    groq`*[_type == "project" && slug.current == $slug][0]{
+      _id,
+      name,
+      projectUrl,
+      coverImage { alt, "image": asset->url },
+      tagline,
+      description
+    }`,
+    { slug }
+  );
 }
